@@ -9,16 +9,17 @@
 
 require 'rbconfig'
 
-unless ENV['CIRCLE_SHA1']
+if ENV['CIRCLE_SHA1']
+  suffix = (RbConfig::CONFIG['host_cpu'] == 'x86_64') ? 'linux_amd64' : 'linux_x86'
+else
   suffix = case RbConfig::CONFIG['host_os']
   when /darwin/
     'darwin_x86'
-  else
+  when /linux/
     (RbConfig::CONFIG['host_cpu'] == 'x86_64') ? 'heroku' : 'linux_x86'
+  else
+    raise "Invalid platform. Must be running on linux or intel-based Mac OS."
   end
-else
-  suffix = (RbConfig::CONFIG['host_cpu'] == 'x86_64') ? 'linux_amd64' : 'linux_x86'
 end
-raise "Invalid platform. Must be running on linux or intel-based Mac OS." unless suffix
 
 system *$*.unshift("#{__FILE__}_#{suffix}")
