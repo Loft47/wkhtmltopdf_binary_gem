@@ -16,7 +16,11 @@ else
   when /darwin/
     'darwin_x86'
   when /linux/
-    (RbConfig::CONFIG['host_cpu'] == 'x86_64') ? 'heroku' : 'linux_x86'
+    if system('lsb_release -a | grep stretch')
+      'stretch_amd64'
+    else
+      (RbConfig::CONFIG['host_cpu'] == 'x86_64') ? 'heroku' : 'linux_x86'
+    end
   else
     raise "Invalid platform. Must be running on linux or intel-based Mac OS."
   end
