@@ -16,8 +16,8 @@ else
   when /darwin/
     'darwin_x86'
   when /linux/
-    if system('lsb_release -a | grep stretch')
-      'stretch_amd64'
+    if system('lsb_release -a | grep buster')
+      'buster_amd64'
     else
       (RbConfig::CONFIG['host_cpu'] == 'x86_64') ? 'heroku' : 'linux_x86'
     end
